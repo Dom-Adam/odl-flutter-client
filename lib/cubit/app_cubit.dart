@@ -11,10 +11,4 @@ class AppCubit extends Cubit<AppState> {
   void loggedIn() => emit(const AppState.loggedIn());
   void loading() => emit(const AppState.loading());
   void unknown() => emit(state.unknown(state.authenticationStatus));
-
-  @override
-  void onChange(Change<AppState> change) {
-    print(change);
-    super.onChange(change);
-  }
 }

@@ -18,9 +18,6 @@ class AuthenticationRepository {
     String username,
     String password,
   ) async {
-    print(username);
-    print(password);
-
     final request = await http.post(
       Uri.parse('http://localhost:3000/auth/login'),
       body: jsonEncode({'username': username, 'password': password}),
@@ -50,11 +47,7 @@ class AuthenticationRepository {
   }
 
   Future<String?> checkAuthStatus() async {
-    print('checkAuthStatus');
     String? jwt = await secureStorage.read(key: 'jwtToken');
-    print(jwt);
-    print(JwtDecoder.isExpired(jwt ?? ''));
-    print(jwt.runtimeType);
 
     if (jwt != null && !JwtDecoder.isExpired(jwt)) {
       _controller.add(AuthenticationStatus.authenticated);

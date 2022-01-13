@@ -4,6 +4,8 @@ import 'package:formz/formz.dart';
 import 'package:odl_flutter_client/login/bloc/login_bloc.dart';
 
 class LoginForm extends StatelessWidget {
+  const LoginForm({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(

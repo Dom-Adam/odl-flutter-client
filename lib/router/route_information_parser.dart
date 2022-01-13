@@ -8,7 +8,6 @@ class AppRouteInformationParser
   Future<AppConfiguration> parseRouteInformation(
     RouteInformation routeInformation,
   ) {
-    print('parseRouteInformation');
     final uri = Uri.parse(routeInformation.location ?? '');
 
     if (uri.pathSegments.length == 1) {
@@ -28,15 +27,11 @@ class AppRouteInformationParser
 
   @override
   RouteInformation? restoreRouteInformation(configuration) {
-    print('restoreRouteInformation');
     if (configuration.isHomePage) {
-      print('home');
       return const RouteInformation(location: '/home');
     } else if (configuration.isLoginPage) {
-      print('login');
       return const RouteInformation(location: '/login');
     } else if (configuration.isSplashPage) {
-      print('splash');
       return const RouteInformation(location: '/splash');
     }
 

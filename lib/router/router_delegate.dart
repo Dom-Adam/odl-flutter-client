@@ -33,7 +33,6 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
 
   @override
   Widget build(BuildContext context) {
-    print("router delegate called with ${appState.state.authenticationStatus}");
     return BlocListener<AppCubit, AppState>(
       listener: (context, state) {
         AuthenticationBloc authenticationBloc =
@@ -75,7 +74,6 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
 
   @override
   Future<void> setNewRoutePath(configuration) async {
-    print('setNewRoutePath');
     if (configuration.isHomePage) {
       appState.loggedIn();
     } else if (configuration.isLoginPage) {
@@ -89,7 +87,6 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
 
   @override
   AppConfiguration get currentConfiguration {
-    print('currentConfiguration called');
     if (appState.state.authenticationStatus ==
         AuthenticationStatus.authenticated) {
       return const AppConfiguration.home();

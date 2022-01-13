@@ -47,12 +47,4 @@ class AuthenticationBloc
     _authenticationRepository.dispose();
     return super.close();
   }
-
-  @override
-  void onTransition(
-    Transition<AuthenticationEvent, AuthenticationState> transition,
-  ) {
-    super.onTransition(transition);
-    print(transition);
-  }
 }

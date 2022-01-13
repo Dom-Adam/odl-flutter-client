@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
                 authenticationRepository:
                     RepositoryProvider.of<AuthenticationRepository>(context));
           },
-          child: LoginForm(),
+          child: const LoginForm(),
         ),
       ),
     );

@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:odl_flutter_client/authentication/bloc/authentication_bloc.dart';
@@ -31,7 +29,6 @@ class MyApp extends StatelessWidget {
         ],
         child: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            print('AuthenticationBlocListener');
             AppCubit appCubit = context.read<AppCubit>();
 
             if (state.runtimeType == AuthenticationInitial) {
