@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:odl_flutter_client/login/models/models.dart';
+import 'package:odl_flutter_client/common/models/models.dart';
 import 'package:odl_flutter_client/repositories/authentication_repository.dart';
 
 part 'login_event.dart';

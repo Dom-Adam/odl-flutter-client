@@ -16,6 +16,7 @@ class AuthenticationBloc
           const AuthenticationInitial(),
         ) {
     on<AuthenticationEvent>((event, emit) {
+      print('authentication event');
       if (event is AuthenticationStatusChanged) {
         switch (event.status) {
           case AuthenticationStatus.authenticated:
@@ -23,12 +24,11 @@ class AuthenticationBloc
           case AuthenticationStatus.unauthenticated:
             return emit(const AuthenticationUnauthenticated());
           default:
+          _authenticationRepository.checkAuthStatus();
             return emit(const AuthenticationInitial());
         }
       } else if (event is AuthenticationLogoutRequested) {
         _authenticationRepository.logOut();
-      } else {
-        _authenticationRepository.checkAuthStatus();
       }
     });
 

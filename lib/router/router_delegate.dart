@@ -6,6 +6,7 @@ import 'package:odl_flutter_client/home/view/home_page.dart';
 import 'package:odl_flutter_client/login/view/login_page.dart';
 import 'package:odl_flutter_client/repositories/authentication_repository.dart';
 import 'package:odl_flutter_client/router/app_configuration.dart';
+import 'package:odl_flutter_client/sign_up/view/sign_up_page.dart';
 import 'package:odl_flutter_client/splash/view/splash_page.dart';
 
 class AppRouterDelegate extends RouterDelegate<AppConfiguration>
@@ -17,12 +18,14 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
   @override
   final GlobalKey<NavigatorState> navigatorKey;
 
-  List<Page> pages(AuthenticationStatus status) {
+  List<Page> pages(AuthenticationStatus status, bool isSignUp) {
     if (status == AuthenticationStatus.authenticated) {
       return [const MaterialPage(child: HomePage(), key: ValueKey('HomePage'))];
     } else if (status == AuthenticationStatus.unauthenticated) {
       return [
-        const MaterialPage(child: LoginPage(), key: ValueKey('LoginPage'))
+        const MaterialPage(child: LoginPage(), key: ValueKey('LoginPage')),
+        if (isSignUp)
+          const MaterialPage(child: SignUpPage(), key: ValueKey('SignUpPage'))
       ];
     } else {
       return [
@@ -35,6 +38,7 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
   Widget build(BuildContext context) {
     return BlocListener<AppCubit, AppState>(
       listener: (context, state) {
+        print('app cubit listener');
         AuthenticationBloc authenticationBloc =
             context.read<AuthenticationBloc>();
 
@@ -60,12 +64,16 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
       },
       child: Navigator(
         key: navigatorKey,
-        pages: pages(appState.state.authenticationStatus),
+        pages: pages(
+            appState.state.authenticationStatus, appState.state.isSignUpPage),
         onPopPage: (route, result) {
           if (!route.didPop(result)) {
             return false;
           }
 
+          if (appState.state.isSignUpPage) {
+            appState.loggedOut();
+          }
           return true;
         },
       ),
@@ -75,12 +83,19 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
   @override
   Future<void> setNewRoutePath(configuration) async {
     if (configuration.isHomePage) {
+      print('set new route path home');
       appState.loggedIn();
     } else if (configuration.isLoginPage) {
+      print('set new route path login');
       appState.loggedOut();
     } else if (configuration.isSplashPage) {
+      print('set new route path splash');
       appState.loading();
+    } else if (configuration.isSignUpPage) {
+      print('set new route path signup');
+      appState.signUp();
     } else {
+      print('set new route path unknown');
       appState.unknown();
     }
   }
@@ -89,11 +104,18 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
   AppConfiguration get currentConfiguration {
     if (appState.state.authenticationStatus ==
         AuthenticationStatus.authenticated) {
+      print('get current configuration home');
       return const AppConfiguration.home();
     } else if (appState.state.authenticationStatus ==
-        AuthenticationStatus.unauthenticated) {
+            AuthenticationStatus.unauthenticated &&
+        !appState.state.isSignUpPage) {
+      print('get current configuration login');
       return const AppConfiguration.login();
+    } else if (appState.state.isSignUpPage) {
+      print('get current configuration signup');
+      return const AppConfiguration.signUp();
     } else {
+      print('get current configuration splash');
       return const AppConfiguration.splash();
     }
   }

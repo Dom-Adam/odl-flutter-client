@@ -10,7 +10,7 @@ class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
 
   Stream<AuthenticationStatus> get status async* {
-    yield AuthenticationStatus.unauthenticated;
+    yield AuthenticationStatus.unknown;
     yield* _controller.stream;
   }
 
@@ -47,6 +47,7 @@ class AuthenticationRepository {
   }
 
   Future<String?> checkAuthStatus() async {
+    print('check auth status');
     String? jwt = await secureStorage.read(key: 'jwtToken');
 
     if (jwt != null && !JwtDecoder.isExpired(jwt)) {

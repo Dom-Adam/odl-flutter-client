@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:odl_flutter_client/cubit/app_cubit.dart';
 import 'package:odl_flutter_client/login/bloc/login_bloc.dart';
 
 class LoginForm extends StatelessWidget {
@@ -26,7 +27,7 @@ class LoginForm extends StatelessWidget {
             const Padding(padding: EdgeInsets.all(12)),
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
-            _LoginButton(),
+            _ButtonGroup(),
           ],
         ),
       ),
@@ -75,21 +76,34 @@ class _PasswordInput extends StatelessWidget {
   }
 }
 
-class _LoginButton extends StatelessWidget {
+class _ButtonGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
-            : ElevatedButton(
-                onPressed: state.status.isValidated
-                    ? () {
-                        context.read<LoginBloc>().add(const LoginSubmitted());
-                      }
-                    : null,
-                child: const Text('Login'),
-                key: const Key('loginForm_continue_raisedButton'),
+            : Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: state.status.isValidated
+                        ? () {
+                            context
+                                .read<LoginBloc>()
+                                .add(const LoginSubmitted());
+                          }
+                        : null,
+                    child: const Text('Login'),
+                    key: const Key('loginForm_continue_raisedButton'),
+                  ),
+                  const Padding(padding: EdgeInsets.all(12)),
+                  OutlinedButton(
+                    onPressed: () {
+                      context.read<AppCubit>().signUp();
+                    },
+                    child: const Text('Sign Up'),
+                  )
+                ],
               );
       },
       buildWhen: (previous, current) => previous.status != current.status,

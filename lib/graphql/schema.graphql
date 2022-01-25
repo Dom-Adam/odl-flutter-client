@@ -1,0 +1,79 @@
+type Dart {
+  id: ID!
+  value: Int!
+  field: Int!
+  segment: Int!
+}
+
+type Visit {
+  id: ID!
+  darts: [Dart!]!
+  legId: String!
+  playerId: String!
+  isFinished: Boolean!
+}
+
+type Leg {
+  id: ID!
+  points: [Int!]!
+  matchId: String!
+  match: Match!
+  isFinished: Boolean!
+  visits: [Visit!]!
+}
+
+type Match {
+  id: ID!
+  players: [User!]!
+  legs: [Leg!]!
+}
+
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  matches: [Match!]!
+  legs: [Leg!]!
+}
+
+type Query {
+  users: [User!]!
+  user(id: String!): User!
+  matches: [Match!]!
+  match(id: ID!): Match!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User!
+  updateMatch(updateMatchInput: UpdateMatchInput!): Match!
+  searchOpponent: String!
+}
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  username: String
+  email: String
+  password: String
+  id: ID!
+}
+
+input UpdateMatchInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  field: Int!
+  segment: Int!
+  matchId: String!
+  legId: String!
+}
+
+type Subscription {
+  getMatchId(id: String!): Match!
+  listenToMatch(matchId: String!): Match!
+}

@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         ],
         child: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
+            print('authentication bloc listener');
             AppCubit appCubit = context.read<AppCubit>();
 
             if (state.runtimeType == AuthenticationInitial) {
@@ -36,13 +37,7 @@ class MyApp extends StatelessWidget {
             }
 
             if (state.status != appCubit.state.authenticationStatus) {
-              if (state.runtimeType == AuthenticationInitial) {
-                appCubit.unknown();
-              } else if (state.runtimeType == AuthenticationAuthenticated) {
-                appCubit.loggedIn();
-              } else {
-                appCubit.loggedOut();
-              }
+              appCubit.authenticationStatusChanged(state.status);
             }
           },
           child: const AppView(),
