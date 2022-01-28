@@ -1,0 +1,8 @@
+subscription GetMatchId($userId: String!) {
+	getMatchId(id: $userId) {
+		id
+		legs {
+			id
+		}
+	}
+}

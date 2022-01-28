@@ -4,6 +4,7 @@ import 'package:odl_flutter_client/authentication/bloc/authentication_bloc.dart'
 import 'package:odl_flutter_client/cubit/app_cubit.dart';
 import 'package:odl_flutter_client/home/view/home_page.dart';
 import 'package:odl_flutter_client/login/view/login_page.dart';
+import 'package:odl_flutter_client/match/view/match_page.dart';
 import 'package:odl_flutter_client/repositories/authentication_repository.dart';
 import 'package:odl_flutter_client/router/app_configuration.dart';
 import 'package:odl_flutter_client/sign_up/view/sign_up_page.dart';
@@ -18,9 +19,20 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
   @override
   final GlobalKey<NavigatorState> navigatorKey;
 
-  List<Page> pages(AuthenticationStatus status, bool isSignUp) {
+  List<Page> pages(
+    AuthenticationStatus status,
+    bool isSignUp,
+    bool isMatchActive,
+  ) {
     if (status == AuthenticationStatus.authenticated) {
-      return [const MaterialPage(child: HomePage(), key: ValueKey('HomePage'))];
+      return [
+        const MaterialPage(
+          child: HomePage(),
+          key: ValueKey('HomePage'),
+        ),
+        if (isMatchActive)
+          const MaterialPage(child: MatchPage(), key: ValueKey('MatchPage'))
+      ];
     } else if (status == AuthenticationStatus.unauthenticated) {
       return [
         const MaterialPage(child: LoginPage(), key: ValueKey('LoginPage')),
@@ -65,7 +77,10 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
       child: Navigator(
         key: navigatorKey,
         pages: pages(
-            appState.state.authenticationStatus, appState.state.isSignUpPage),
+          appState.state.authenticationStatus,
+          appState.state.isSignUpPage,
+          appState.state.isMatchActive,
+        ),
         onPopPage: (route, result) {
           if (!route.didPop(result)) {
             return false;
@@ -74,6 +89,7 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
           if (appState.state.isSignUpPage) {
             appState.loggedOut();
           }
+
           return true;
         },
       ),
@@ -94,6 +110,8 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
     } else if (configuration.isSignUpPage) {
       print('set new route path signup');
       appState.signUp();
+    } else if (configuration.isMatchPage) {
+      appState.match();
     } else {
       print('set new route path unknown');
       appState.unknown();
@@ -103,7 +121,8 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
   @override
   AppConfiguration get currentConfiguration {
     if (appState.state.authenticationStatus ==
-        AuthenticationStatus.authenticated) {
+            AuthenticationStatus.authenticated &&
+        !appState.state.isMatchActive) {
       print('get current configuration home');
       return const AppConfiguration.home();
     } else if (appState.state.authenticationStatus ==
@@ -114,6 +133,8 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
     } else if (appState.state.isSignUpPage) {
       print('get current configuration signup');
       return const AppConfiguration.signUp();
+    } else if (appState.state.isMatchActive) {
+      return const AppConfiguration.match();
     } else {
       print('get current configuration splash');
       return const AppConfiguration.splash();

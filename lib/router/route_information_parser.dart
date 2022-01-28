@@ -20,6 +20,8 @@ class AppRouteInformationParser
         return SynchronousFuture(const AppConfiguration.login());
       } else if (first == 'signup') {
         return SynchronousFuture(const AppConfiguration.signUp());
+      } else if (first == 'match') {
+        return SynchronousFuture(const AppConfiguration.match());
       } else {
         return SynchronousFuture(const AppConfiguration.splash());
       }
@@ -42,6 +44,8 @@ class AppRouteInformationParser
     } else if (configuration.isSignUpPage) {
       print('restore route information signup');
       return const RouteInformation(location: '/signup');
+    } else if (configuration.isMatchPage) {
+      return const RouteInformation(location: '/match');
     }
     print('restore route information null');
     return null;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:odl_flutter_client/authentication/bloc/authentication_bloc.dart';
 import 'package:odl_flutter_client/cubit/app_cubit.dart';
+import 'package:odl_flutter_client/repositories/match_repository.dart';
 import 'package:odl_flutter_client/router/route_information_parser.dart';
 import 'package:odl_flutter_client/router/router_delegate.dart';
 import 'package:odl_flutter_client/repositories/authentication_repository.dart';
@@ -16,8 +17,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: authenticationRepository,
+        ),
+        RepositoryProvider(
+          create: (context) => MatchRepository(),
+        ),
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -25,7 +33,10 @@ class MyApp extends StatelessWidget {
               authenticationRepository: authenticationRepository,
             ),
           ),
-          BlocProvider(create: (BuildContext context) => AppCubit())
+          BlocProvider(
+            create: (BuildContext context) =>
+                AppCubit(matchRepository: context.read<MatchRepository>()),
+          )
         ],
         child: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {

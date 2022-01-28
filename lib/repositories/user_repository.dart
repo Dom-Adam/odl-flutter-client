@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:ferry/ferry.dart';
 import 'package:odl_flutter_client/main.dart';
-import 'package:odl_flutter_client/sign_up/graphql/create_user.data.gql.dart';
 import 'package:odl_flutter_client/sign_up/graphql/create_user.req.gql.dart';
-import 'package:odl_flutter_client/sign_up/graphql/create_user.var.gql.dart';
 
 class UserRepository {
   Future<bool> createUser(
