@@ -1,0 +1,14 @@
+subscription ListenToMatch($matchId: String!) {
+  listenToMatch(matchId: $matchId) {
+    legs {
+      id
+      points
+      isFinished
+      visits {
+        id
+        playerId
+        isFinished
+      }
+    }
+  }
+}

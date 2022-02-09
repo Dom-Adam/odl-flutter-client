@@ -1,8 +1,12 @@
 subscription GetMatchId($userId: String!) {
-	getMatchId(id: $userId) {
-		id
-		legs {
-			id
-		}
-	}
+  getMatchId(id: $userId) {
+    id
+    players {
+      username
+      id
+    }
+    legs {
+      id
+    }
+  }
 }

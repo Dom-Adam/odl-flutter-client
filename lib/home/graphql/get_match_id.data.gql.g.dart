@@ -10,6 +10,9 @@ Serializer<GGetMatchIdData> _$gGetMatchIdDataSerializer =
     new _$GGetMatchIdDataSerializer();
 Serializer<GGetMatchIdData_getMatchId> _$gGetMatchIdDataGetMatchIdSerializer =
     new _$GGetMatchIdData_getMatchIdSerializer();
+Serializer<GGetMatchIdData_getMatchId_players>
+    _$gGetMatchIdDataGetMatchIdPlayersSerializer =
+    new _$GGetMatchIdData_getMatchId_playersSerializer();
 Serializer<GGetMatchIdData_getMatchId_legs>
     _$gGetMatchIdDataGetMatchIdLegsSerializer =
     new _$GGetMatchIdData_getMatchId_legsSerializer();
@@ -84,6 +87,10 @@ class _$GGetMatchIdData_getMatchIdSerializer
           specifiedType: const FullType(String)),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(String)),
+      'players',
+      serializers.serialize(object.players,
+          specifiedType: const FullType(BuiltList,
+              const [const FullType(GGetMatchIdData_getMatchId_players)])),
       'legs',
       serializers.serialize(object.legs,
           specifiedType: const FullType(BuiltList,
@@ -113,11 +120,76 @@ class _$GGetMatchIdData_getMatchIdSerializer
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'players':
+          result.players.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(GGetMatchIdData_getMatchId_players)
+              ]))! as BuiltList<Object?>);
+          break;
         case 'legs':
           result.legs.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltList, const [
                 const FullType(GGetMatchIdData_getMatchId_legs)
               ]))! as BuiltList<Object?>);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$GGetMatchIdData_getMatchId_playersSerializer
+    implements StructuredSerializer<GGetMatchIdData_getMatchId_players> {
+  @override
+  final Iterable<Type> types = const [
+    GGetMatchIdData_getMatchId_players,
+    _$GGetMatchIdData_getMatchId_players
+  ];
+  @override
+  final String wireName = 'GGetMatchIdData_getMatchId_players';
+
+  @override
+  Iterable<Object?> serialize(
+      Serializers serializers, GGetMatchIdData_getMatchId_players object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object?>[
+      '__typename',
+      serializers.serialize(object.G__typename,
+          specifiedType: const FullType(String)),
+      'username',
+      serializers.serialize(object.username,
+          specifiedType: const FullType(String)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  GGetMatchIdData_getMatchId_players deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new GGetMatchIdData_getMatchId_playersBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final Object? value = iterator.current;
+      switch (key) {
+        case '__typename':
+          result.G__typename = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'username':
+          result.username = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -295,6 +367,8 @@ class _$GGetMatchIdData_getMatchId extends GGetMatchIdData_getMatchId {
   @override
   final String id;
   @override
+  final BuiltList<GGetMatchIdData_getMatchId_players> players;
+  @override
   final BuiltList<GGetMatchIdData_getMatchId_legs> legs;
 
   factory _$GGetMatchIdData_getMatchId(
@@ -302,12 +376,17 @@ class _$GGetMatchIdData_getMatchId extends GGetMatchIdData_getMatchId {
       (new GGetMatchIdData_getMatchIdBuilder()..update(updates)).build();
 
   _$GGetMatchIdData_getMatchId._(
-      {required this.G__typename, required this.id, required this.legs})
+      {required this.G__typename,
+      required this.id,
+      required this.players,
+      required this.legs})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         G__typename, 'GGetMatchIdData_getMatchId', 'G__typename');
     BuiltValueNullFieldError.checkNotNull(
         id, 'GGetMatchIdData_getMatchId', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        players, 'GGetMatchIdData_getMatchId', 'players');
     BuiltValueNullFieldError.checkNotNull(
         legs, 'GGetMatchIdData_getMatchId', 'legs');
   }
@@ -327,13 +406,15 @@ class _$GGetMatchIdData_getMatchId extends GGetMatchIdData_getMatchId {
     return other is GGetMatchIdData_getMatchId &&
         G__typename == other.G__typename &&
         id == other.id &&
+        players == other.players &&
         legs == other.legs;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, G__typename.hashCode), id.hashCode), legs.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, G__typename.hashCode), id.hashCode), players.hashCode),
+        legs.hashCode));
   }
 
   @override
@@ -341,6 +422,7 @@ class _$GGetMatchIdData_getMatchId extends GGetMatchIdData_getMatchId {
     return (newBuiltValueToStringHelper('GGetMatchIdData_getMatchId')
           ..add('G__typename', G__typename)
           ..add('id', id)
+          ..add('players', players)
           ..add('legs', legs))
         .toString();
   }
@@ -359,6 +441,12 @@ class GGetMatchIdData_getMatchIdBuilder
   String? get id => _$this._id;
   set id(String? id) => _$this._id = id;
 
+  ListBuilder<GGetMatchIdData_getMatchId_players>? _players;
+  ListBuilder<GGetMatchIdData_getMatchId_players> get players =>
+      _$this._players ??= new ListBuilder<GGetMatchIdData_getMatchId_players>();
+  set players(ListBuilder<GGetMatchIdData_getMatchId_players>? players) =>
+      _$this._players = players;
+
   ListBuilder<GGetMatchIdData_getMatchId_legs>? _legs;
   ListBuilder<GGetMatchIdData_getMatchId_legs> get legs =>
       _$this._legs ??= new ListBuilder<GGetMatchIdData_getMatchId_legs>();
@@ -374,6 +462,7 @@ class GGetMatchIdData_getMatchIdBuilder
     if ($v != null) {
       _G__typename = $v.G__typename;
       _id = $v.id;
+      _players = $v.players.toBuilder();
       _legs = $v.legs.toBuilder();
       _$v = null;
     }
@@ -401,10 +490,13 @@ class GGetMatchIdData_getMatchIdBuilder
                   G__typename, 'GGetMatchIdData_getMatchId', 'G__typename'),
               id: BuiltValueNullFieldError.checkNotNull(
                   id, 'GGetMatchIdData_getMatchId', 'id'),
+              players: players.build(),
               legs: legs.build());
     } catch (_) {
       late String _$failedField;
       try {
+        _$failedField = 'players';
+        players.build();
         _$failedField = 'legs';
         legs.build();
       } catch (e) {
@@ -413,6 +505,126 @@ class GGetMatchIdData_getMatchIdBuilder
       }
       rethrow;
     }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$GGetMatchIdData_getMatchId_players
+    extends GGetMatchIdData_getMatchId_players {
+  @override
+  final String G__typename;
+  @override
+  final String username;
+  @override
+  final String id;
+
+  factory _$GGetMatchIdData_getMatchId_players(
+          [void Function(GGetMatchIdData_getMatchId_playersBuilder)?
+              updates]) =>
+      (new GGetMatchIdData_getMatchId_playersBuilder()..update(updates))
+          .build();
+
+  _$GGetMatchIdData_getMatchId_players._(
+      {required this.G__typename, required this.username, required this.id})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(
+        G__typename, 'GGetMatchIdData_getMatchId_players', 'G__typename');
+    BuiltValueNullFieldError.checkNotNull(
+        username, 'GGetMatchIdData_getMatchId_players', 'username');
+    BuiltValueNullFieldError.checkNotNull(
+        id, 'GGetMatchIdData_getMatchId_players', 'id');
+  }
+
+  @override
+  GGetMatchIdData_getMatchId_players rebuild(
+          void Function(GGetMatchIdData_getMatchId_playersBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  GGetMatchIdData_getMatchId_playersBuilder toBuilder() =>
+      new GGetMatchIdData_getMatchId_playersBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is GGetMatchIdData_getMatchId_players &&
+        G__typename == other.G__typename &&
+        username == other.username &&
+        id == other.id;
+  }
+
+  @override
+  int get hashCode {
+    return $jf(
+        $jc($jc($jc(0, G__typename.hashCode), username.hashCode), id.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('GGetMatchIdData_getMatchId_players')
+          ..add('G__typename', G__typename)
+          ..add('username', username)
+          ..add('id', id))
+        .toString();
+  }
+}
+
+class GGetMatchIdData_getMatchId_playersBuilder
+    implements
+        Builder<GGetMatchIdData_getMatchId_players,
+            GGetMatchIdData_getMatchId_playersBuilder> {
+  _$GGetMatchIdData_getMatchId_players? _$v;
+
+  String? _G__typename;
+  String? get G__typename => _$this._G__typename;
+  set G__typename(String? G__typename) => _$this._G__typename = G__typename;
+
+  String? _username;
+  String? get username => _$this._username;
+  set username(String? username) => _$this._username = username;
+
+  String? _id;
+  String? get id => _$this._id;
+  set id(String? id) => _$this._id = id;
+
+  GGetMatchIdData_getMatchId_playersBuilder() {
+    GGetMatchIdData_getMatchId_players._initializeBuilder(this);
+  }
+
+  GGetMatchIdData_getMatchId_playersBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _G__typename = $v.G__typename;
+      _username = $v.username;
+      _id = $v.id;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(GGetMatchIdData_getMatchId_players other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$GGetMatchIdData_getMatchId_players;
+  }
+
+  @override
+  void update(
+      void Function(GGetMatchIdData_getMatchId_playersBuilder)? updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$GGetMatchIdData_getMatchId_players build() {
+    final _$result = _$v ??
+        new _$GGetMatchIdData_getMatchId_players._(
+            G__typename: BuiltValueNullFieldError.checkNotNull(G__typename,
+                'GGetMatchIdData_getMatchId_players', 'G__typename'),
+            username: BuiltValueNullFieldError.checkNotNull(
+                username, 'GGetMatchIdData_getMatchId_players', 'username'),
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'GGetMatchIdData_getMatchId_players', 'id'));
     replace(_$result);
     return _$result;
   }

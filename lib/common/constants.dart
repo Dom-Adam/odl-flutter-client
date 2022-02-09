@@ -1,1 +1,2 @@
-const JWT_TOKEN = 'jwtToken';
+const jwtToken = 'jwtToken';
+const backspace = 'backspace';

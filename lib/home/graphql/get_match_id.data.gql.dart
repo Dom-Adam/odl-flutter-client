@@ -42,6 +42,7 @@ abstract class GGetMatchIdData_getMatchId
   @BuiltValueField(wireName: '__typename')
   String get G__typename;
   String get id;
+  BuiltList<GGetMatchIdData_getMatchId_players> get players;
   BuiltList<GGetMatchIdData_getMatchId_legs> get legs;
   static Serializer<GGetMatchIdData_getMatchId> get serializer =>
       _$gGetMatchIdDataGetMatchIdSerializer;
@@ -50,6 +51,33 @@ abstract class GGetMatchIdData_getMatchId
   static GGetMatchIdData_getMatchId? fromJson(Map<String, dynamic> json) =>
       _i1.serializers
           .deserializeWith(GGetMatchIdData_getMatchId.serializer, json);
+}
+
+abstract class GGetMatchIdData_getMatchId_players
+    implements
+        Built<GGetMatchIdData_getMatchId_players,
+            GGetMatchIdData_getMatchId_playersBuilder> {
+  GGetMatchIdData_getMatchId_players._();
+
+  factory GGetMatchIdData_getMatchId_players(
+          [Function(GGetMatchIdData_getMatchId_playersBuilder b) updates]) =
+      _$GGetMatchIdData_getMatchId_players;
+
+  static void _initializeBuilder(GGetMatchIdData_getMatchId_playersBuilder b) =>
+      b..G__typename = 'User';
+  @BuiltValueField(wireName: '__typename')
+  String get G__typename;
+  String get username;
+  String get id;
+  static Serializer<GGetMatchIdData_getMatchId_players> get serializer =>
+      _$gGetMatchIdDataGetMatchIdPlayersSerializer;
+  Map<String, dynamic> toJson() => (_i1.serializers
+          .serializeWith(GGetMatchIdData_getMatchId_players.serializer, this)
+      as Map<String, dynamic>);
+  static GGetMatchIdData_getMatchId_players? fromJson(
+          Map<String, dynamic> json) =>
+      _i1.serializers
+          .deserializeWith(GGetMatchIdData_getMatchId_players.serializer, json);
 }
 
 abstract class GGetMatchIdData_getMatchId_legs

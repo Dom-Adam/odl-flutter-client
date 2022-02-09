@@ -24,6 +24,7 @@ class HomePage extends StatelessWidget {
             builder: (context, state) {
               return state.matchStatus == MatchStatus.inactive
                   ? Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton(
                           onPressed: () {
@@ -31,6 +32,7 @@ class HomePage extends StatelessWidget {
                           },
                           child: const Text('ready'),
                         ),
+                        const Padding(padding: EdgeInsets.all(12)),
                         OutlinedButton(
                           onPressed: () {
                             context
@@ -46,43 +48,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ButtonGroup extends StatelessWidget {
-  const _ButtonGroup({
-    Key? key,
-    required this.homeCubit,
-  }) : super(key: key);
-
-  final HomeCubit homeCubit;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) {
-        return state.matchStatus == MatchStatus.inactive
-            ? Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      homeCubit.searchOpponent();
-                    },
-                    child: const Text('ready'),
-                  ),
-                  OutlinedButton(
-                    onPressed: () {
-                      context
-                          .read<AuthenticationBloc>()
-                          .add(const AuthenticationLogoutRequested());
-                    },
-                    child: const Text('logout'),
-                  ),
-                ],
-              )
-            : const CircularProgressIndicator();
-      },
     );
   }
 }

@@ -66,13 +66,13 @@ class AuthenticationRepository {
   }
 
   Future<void> logOut() async {
-    await secureStorage.delete(key: JWT_TOKEN);
+    await secureStorage.delete(key: jwtToken);
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
   Future<String?> checkAuthStatus() async {
     print('check auth status');
-    String? jwt = await secureStorage.read(key: JWT_TOKEN);
+    String? jwt = await secureStorage.read(key: jwtToken);
 
     if (jwt != null && !JwtDecoder.isExpired(jwt)) {
       _controller.add(AuthenticationStatus.authenticated);

@@ -9,16 +9,18 @@ import 'package:odl_flutter_client/repositories/match_repository.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required MatchRepository matchRepository, required AuthenticationRepository authenticationRepository})
-      : _matchRepository = matchRepository,
-      _authenticationRepository = authenticationRepository,
+  HomeCubit({
+    required MatchRepository matchRepository,
+    required AuthenticationRepository authenticationRepository,
+  })  : _matchRepository = matchRepository,
+        _authenticationRepository = authenticationRepository,
         super(const HomeInitial()) {
     _matchStatusSubscription =
         _matchRepository.matchStatusSubject.listen((value) {
       matchStatusChanged(value);
     });
 
-    _matchRepository.getMatchIdStream(_authenticationRepository.userId);
+    _matchRepository.getMatchId(_authenticationRepository.userId);
   }
 
   final AuthenticationRepository _authenticationRepository;

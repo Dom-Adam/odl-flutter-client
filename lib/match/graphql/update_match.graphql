@@ -1,0 +1,5 @@
+mutation UpdateMatch($score: UpdateMatchInput!) {
+  updateMatch(updateMatchInput: $score) {
+    id
+  }
+}
