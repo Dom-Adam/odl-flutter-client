@@ -103,13 +103,14 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
       if (event.data == null) return;
 
       final leg =
-          event.data!.listenToMatch.legs.where((leg) => !leg.isFinished);
-      final legId = leg.isEmpty ? state.legId : leg.first.id;
+          event.data?.listenToMatch.legs.where((leg) => !leg.isFinished);
+      final legId = leg == null || leg.isEmpty ? state.legId : leg.first.id;
       final currentLeg =
-          event.data!.listenToMatch.legs.firstWhere((leg) => leg.id == legId);
+          event.data?.listenToMatch.legs.firstWhere((leg) => leg.id == legId);
       final isNewLeg =
-          event.data!.listenToMatch.legs.every((p0) => p0.isFinished);
-      final isNewVisit = currentLeg.visits.every((p0) => p0.isFinished);
+          event.data?.listenToMatch.legs.every((p0) => p0.isFinished) ?? false;
+      final isNewVisit =
+          currentLeg?.visits.every((p0) => p0.isFinished) ?? false;
 
       add(MatchUpdated(
         player1Legs: event.data?.listenToMatch.legs

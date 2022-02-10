@@ -11,83 +11,93 @@ class Numpad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      fit: FlexFit.tight,
-      flex: 3,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Flexible(
-            fit: FlexFit.tight,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Center(
-                    child: BlocBuilder<MatchBloc, MatchState>(
-                      buildWhen: (previous, current) =>
-                          previous.scoreField != current.scoreField,
-                      builder: (context, state) {
-                        return Text(
-                          state.scoreField,
-                          textAlign: TextAlign.center,
-                          style: state.score.invalid
-                              ? TextStyle(color: Theme.of(context).errorColor)
-                              : null,
-                        );
-                      },
+    return BlocListener<MatchBloc, MatchState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+                const SnackBar(content: Text('score submission failure')));
+        }
+      },
+      child: Flexible(
+        fit: FlexFit.tight,
+        flex: 3,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Flexible(
+              fit: FlexFit.tight,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: BlocBuilder<MatchBloc, MatchState>(
+                        buildWhen: (previous, current) =>
+                            previous.scoreField != current.scoreField,
+                        builder: (context, state) {
+                          return Text(
+                            state.scoreField,
+                            textAlign: TextAlign.center,
+                            style: state.score.invalid
+                                ? TextStyle(color: Theme.of(context).errorColor)
+                                : null,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    onPressed: () => context
-                        .read<MatchBloc>()
-                        .add(const MatchScoreChanged(backspace)),
-                    icon: const Icon(Icons.backspace),
-                  ),
-                )
-              ],
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () => context
+                          .read<MatchBloc>()
+                          .add(const MatchScoreChanged(backspace)),
+                      icon: const Icon(Icons.backspace),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          const NumpadRow(keys: ['1', '2', '3']),
-          const NumpadRow(keys: ['4', '5', '6']),
-          const NumpadRow(keys: ['7', '8', '9']),
-          Flexible(
-            fit: FlexFit.tight,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: const [
-                NumberKey(number: '0'),
-                ToggleButton(index: 0, text: 'double'),
-                ToggleButton(index: 1, text: 'treble'),
-              ],
+            const NumpadRow(keys: ['1', '2', '3']),
+            const NumpadRow(keys: ['4', '5', '6']),
+            const NumpadRow(keys: ['7', '8', '9']),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: const [
+                  NumberKey(number: '0'),
+                  ToggleButton(index: 0, text: 'double'),
+                  ToggleButton(index: 1, text: 'treble'),
+                ],
+              ),
             ),
-          ),
-          Flexible(
-            fit: FlexFit.tight,
-            child: BlocBuilder<MatchBloc, MatchState>(
-              buildWhen: (previous, current) =>
-                  previous.currentlyThrowing != current.currentlyThrowing ||
-                  previous.status != current.status,
-              builder: (context, state) {
-                return ElevatedButton(
-                  onPressed: state.whoAmI == state.currentlyThrowing &&
-                          state.status.isValidated
-                      ? () {
-                          context
-                              .read<MatchBloc>()
-                              .add(const MatchScoreSubmitted());
-                        }
-                      : null,
-                  child: const Text('enter'),
-                );
-              },
+            Flexible(
+              fit: FlexFit.tight,
+              child: BlocBuilder<MatchBloc, MatchState>(
+                buildWhen: (previous, current) =>
+                    previous.currentlyThrowing != current.currentlyThrowing ||
+                    previous.status != current.status,
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: state.whoAmI == state.currentlyThrowing &&
+                            state.status.isValidated
+                        ? () {
+                            context
+                                .read<MatchBloc>()
+                                .add(const MatchScoreSubmitted());
+                          }
+                        : null,
+                    child: const Text('enter'),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
