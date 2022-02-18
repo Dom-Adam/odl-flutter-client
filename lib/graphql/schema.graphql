@@ -20,12 +20,14 @@ type Leg {
   match: Match!
   isFinished: Boolean!
   visits: [Visit!]!
+  playerId: String!
 }
 
 type Match {
   id: ID!
   players: [User!]!
   legs: [Leg!]!
+  isFinished: Boolean!
 }
 
 type User {
@@ -65,12 +67,15 @@ input UpdateUserInput {
 }
 
 input UpdateMatchInput {
-  """Example field (placeholder)"""
+  """
+  Example field (placeholder)
+  """
   exampleField: Int
   field: Int!
   segment: Int!
   matchId: String!
   legId: String!
+  isFinished: Boolean!
 }
 
 type Subscription {

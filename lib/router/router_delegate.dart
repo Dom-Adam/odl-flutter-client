@@ -49,23 +49,27 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
   @override
   Widget build(BuildContext context) {
     return BlocListener<AppCubit, AppState>(
+      listenWhen: (previous, current) =>
+          previous.authenticationStatus != current.authenticationStatus,
       listener: (context, state) {
         print('app cubit listener');
         AuthenticationBloc authenticationBloc =
             context.read<AuthenticationBloc>();
 
-        if (state.authenticationStatus != authenticationBloc.state.status) {
+        if (state.authenticationStatus !=
+            authenticationBloc.state.authenticationStatus) {
           switch (state.authenticationStatus) {
             case AuthenticationStatus.unknown:
-              authenticationBloc.add(const AuthenticationStatusChanged(
-                  AuthenticationStatus.unknown));
+              authenticationBloc.add(const AuthenticationAuthInfoChanged(
+                authenticationStatus: AuthenticationStatus.unknown,
+                userId: '',
+              ));
               break;
             case AuthenticationStatus.authenticated:
-              authenticationBloc.add(
-                const AuthenticationStatusChanged(
-                  AuthenticationStatus.authenticated,
-                ),
-              );
+              authenticationBloc.add(AuthenticationAuthInfoChanged(
+                authenticationStatus: AuthenticationStatus.authenticated,
+                userId: state.userId,
+              ));
               break;
             case AuthenticationStatus.unauthenticated:
               authenticationBloc.add(const AuthenticationLogoutRequested());

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:odl_flutter_client/authentication/bloc/authentication_bloc.dart';
+import 'package:odl_flutter_client/cubit/app_cubit.dart';
 import 'package:odl_flutter_client/home/cubit/home_cubit.dart';
-import 'package:odl_flutter_client/repositories/authentication_repository.dart';
 import 'package:odl_flutter_client/repositories/match_repository.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => HomeCubit(
         matchRepository: context.read<MatchRepository>(),
-        authenticationRepository: context.read<AuthenticationRepository>(),
+        userId: context.read<AppCubit>().state.userId,
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -22,13 +22,13 @@ class HomePage extends StatelessWidget {
         body: Center(
           child: BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
-              return state.matchStatus == MatchStatus.inactive
+              return !state.searchingOpponent
                   ? Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            context.read<HomeCubit>().searchOpponent();
+                            context.read<AppCubit>().searchOpponent();
                           },
                           child: const Text('ready'),
                         ),

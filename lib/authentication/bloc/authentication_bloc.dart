@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:odl_flutter_client/common/models/auth_info.dart';
 import 'package:odl_flutter_client/repositories/authentication_repository.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/foundation.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
+part 'authentication_bloc.freezed.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -13,33 +16,40 @@ class AuthenticationBloc
     required AuthenticationRepository authenticationRepository,
   })  : _authenticationRepository = authenticationRepository,
         super(
-          const AuthenticationInitial(),
+          const AuthenticationState(
+            authenticationStatus: AuthenticationStatus.unknown,
+            userId: '',
+          ),
         ) {
-    on<AuthenticationEvent>((event, emit) {
-      print('authentication event');
-      if (event is AuthenticationStatusChanged) {
-        switch (event.status) {
-          case AuthenticationStatus.authenticated:
-            return emit(const AuthenticationAuthenticated());
-          case AuthenticationStatus.unauthenticated:
-            return emit(const AuthenticationUnauthenticated());
-          default:
-          _authenticationRepository.checkAuthStatus();
-            return emit(const AuthenticationInitial());
-        }
-      } else if (event is AuthenticationLogoutRequested) {
-        _authenticationRepository.logOut();
+    on<AuthenticationAuthInfoChanged>((event, emit) {
+      emit(AuthenticationState(
+        authenticationStatus: event.authenticationStatus,
+        userId: event.userId,
+      ));
+
+      if (event.authenticationStatus == AuthenticationStatus.unknown) {
+        _authenticationRepository.checkAuthStatus();
       }
     });
 
-    _authenticationStatusSubscription = _authenticationRepository.status.listen(
-      (status) => add(AuthenticationStatusChanged(status)),
-    );
+    on<AuthenticationLogoutRequested>(
+        (event, emit) => _authenticationRepository.logOut());
+
+    _authenticationStatusSubscription = _authenticationRepository.authInfo
+        .listen((event) => add(AuthenticationAuthInfoChanged(
+              authenticationStatus: event.authenticationStatus,
+              userId: event.userId,
+            )));
   }
 
   final AuthenticationRepository _authenticationRepository;
-  late StreamSubscription<AuthenticationStatus>
-      _authenticationStatusSubscription;
+  late StreamSubscription<AuthInfo> _authenticationStatusSubscription;
+
+  @override
+  void onChange(Change<AuthenticationState> change) {
+    print(change);
+    super.onChange(change);
+  }
 
   @override
   Future<void> close() {

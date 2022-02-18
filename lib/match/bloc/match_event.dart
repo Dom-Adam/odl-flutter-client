@@ -56,3 +56,7 @@ class MatchSegmentChanged extends MatchEvent {
   @override
   List<Object> get props => [index];
 }
+
+class MatchRequestFinish extends MatchEvent {
+  const MatchRequestFinish();
+}

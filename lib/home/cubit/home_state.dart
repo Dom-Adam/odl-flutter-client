@@ -1,18 +1,19 @@
 part of 'home_cubit.dart';
 
 abstract class HomeState extends Equatable {
-  const HomeState(this.matchStatus);
+  const HomeState(this.searchingOpponent);
 
-  final MatchStatus matchStatus;
+  final bool searchingOpponent;
 
   @override
-  List<Object> get props => [matchStatus];
+  List<Object> get props => [searchingOpponent];
 }
 
 class HomeInitial extends HomeState {
-  const HomeInitial() : super(MatchStatus.inactive);
+  const HomeInitial() : super(false);
 }
 
 class HomeMatchStatusChanged extends HomeState {
-  const HomeMatchStatusChanged(MatchStatus matchStatus) : super(matchStatus);
+  const HomeMatchStatusChanged(bool searchingOpponent)
+      : super(searchingOpponent);
 }

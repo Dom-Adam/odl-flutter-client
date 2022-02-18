@@ -88,6 +88,9 @@ class _$GListenToMatchData_listenToMatchSerializer
       '__typename',
       serializers.serialize(object.G__typename,
           specifiedType: const FullType(String)),
+      'isFinished',
+      serializers.serialize(object.isFinished,
+          specifiedType: const FullType(bool)),
       'legs',
       serializers.serialize(object.legs,
           specifiedType: const FullType(BuiltList,
@@ -112,6 +115,10 @@ class _$GListenToMatchData_listenToMatchSerializer
         case '__typename':
           result.G__typename = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'isFinished':
+          result.isFinished = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'legs':
           result.legs.replace(serializers.deserialize(value,
@@ -392,6 +399,8 @@ class _$GListenToMatchData_listenToMatch
   @override
   final String G__typename;
   @override
+  final bool isFinished;
+  @override
   final BuiltList<GListenToMatchData_listenToMatch_legs> legs;
 
   factory _$GListenToMatchData_listenToMatch(
@@ -399,10 +408,12 @@ class _$GListenToMatchData_listenToMatch
       (new GListenToMatchData_listenToMatchBuilder()..update(updates)).build();
 
   _$GListenToMatchData_listenToMatch._(
-      {required this.G__typename, required this.legs})
+      {required this.G__typename, required this.isFinished, required this.legs})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         G__typename, 'GListenToMatchData_listenToMatch', 'G__typename');
+    BuiltValueNullFieldError.checkNotNull(
+        isFinished, 'GListenToMatchData_listenToMatch', 'isFinished');
     BuiltValueNullFieldError.checkNotNull(
         legs, 'GListenToMatchData_listenToMatch', 'legs');
   }
@@ -421,18 +432,21 @@ class _$GListenToMatchData_listenToMatch
     if (identical(other, this)) return true;
     return other is GListenToMatchData_listenToMatch &&
         G__typename == other.G__typename &&
+        isFinished == other.isFinished &&
         legs == other.legs;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, G__typename.hashCode), legs.hashCode));
+    return $jf($jc(
+        $jc($jc(0, G__typename.hashCode), isFinished.hashCode), legs.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('GListenToMatchData_listenToMatch')
           ..add('G__typename', G__typename)
+          ..add('isFinished', isFinished)
           ..add('legs', legs))
         .toString();
   }
@@ -448,6 +462,10 @@ class GListenToMatchData_listenToMatchBuilder
   String? get G__typename => _$this._G__typename;
   set G__typename(String? G__typename) => _$this._G__typename = G__typename;
 
+  bool? _isFinished;
+  bool? get isFinished => _$this._isFinished;
+  set isFinished(bool? isFinished) => _$this._isFinished = isFinished;
+
   ListBuilder<GListenToMatchData_listenToMatch_legs>? _legs;
   ListBuilder<GListenToMatchData_listenToMatch_legs> get legs =>
       _$this._legs ??= new ListBuilder<GListenToMatchData_listenToMatch_legs>();
@@ -462,6 +480,7 @@ class GListenToMatchData_listenToMatchBuilder
     final $v = _$v;
     if ($v != null) {
       _G__typename = $v.G__typename;
+      _isFinished = $v.isFinished;
       _legs = $v.legs.toBuilder();
       _$v = null;
     }
@@ -487,6 +506,8 @@ class GListenToMatchData_listenToMatchBuilder
           new _$GListenToMatchData_listenToMatch._(
               G__typename: BuiltValueNullFieldError.checkNotNull(G__typename,
                   'GListenToMatchData_listenToMatch', 'G__typename'),
+              isFinished: BuiltValueNullFieldError.checkNotNull(
+                  isFinished, 'GListenToMatchData_listenToMatch', 'isFinished'),
               legs: legs.build());
     } catch (_) {
       late String _$failedField;

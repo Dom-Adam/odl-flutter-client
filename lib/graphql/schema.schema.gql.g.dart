@@ -164,6 +164,9 @@ class _$GUpdateMatchInputSerializer
       'legId',
       serializers.serialize(object.legId,
           specifiedType: const FullType(String)),
+      'isFinished',
+      serializers.serialize(object.isFinished,
+          specifiedType: const FullType(bool)),
     ];
     Object? value;
     value = object.exampleField;
@@ -206,6 +209,10 @@ class _$GUpdateMatchInputSerializer
         case 'legId':
           result.legId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'isFinished':
+          result.isFinished = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
       }
     }
@@ -450,6 +457,8 @@ class _$GUpdateMatchInput extends GUpdateMatchInput {
   final String matchId;
   @override
   final String legId;
+  @override
+  final bool isFinished;
 
   factory _$GUpdateMatchInput(
           [void Function(GUpdateMatchInputBuilder)? updates]) =>
@@ -460,7 +469,8 @@ class _$GUpdateMatchInput extends GUpdateMatchInput {
       required this.field,
       required this.segment,
       required this.matchId,
-      required this.legId})
+      required this.legId,
+      required this.isFinished})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(field, 'GUpdateMatchInput', 'field');
     BuiltValueNullFieldError.checkNotNull(
@@ -468,6 +478,8 @@ class _$GUpdateMatchInput extends GUpdateMatchInput {
     BuiltValueNullFieldError.checkNotNull(
         matchId, 'GUpdateMatchInput', 'matchId');
     BuiltValueNullFieldError.checkNotNull(legId, 'GUpdateMatchInput', 'legId');
+    BuiltValueNullFieldError.checkNotNull(
+        isFinished, 'GUpdateMatchInput', 'isFinished');
   }
 
   @override
@@ -486,17 +498,20 @@ class _$GUpdateMatchInput extends GUpdateMatchInput {
         field == other.field &&
         segment == other.segment &&
         matchId == other.matchId &&
-        legId == other.legId;
+        legId == other.legId &&
+        isFinished == other.isFinished;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, exampleField.hashCode), field.hashCode),
-                segment.hashCode),
-            matchId.hashCode),
-        legId.hashCode));
+            $jc(
+                $jc($jc($jc(0, exampleField.hashCode), field.hashCode),
+                    segment.hashCode),
+                matchId.hashCode),
+            legId.hashCode),
+        isFinished.hashCode));
   }
 
   @override
@@ -506,7 +521,8 @@ class _$GUpdateMatchInput extends GUpdateMatchInput {
           ..add('field', field)
           ..add('segment', segment)
           ..add('matchId', matchId)
-          ..add('legId', legId))
+          ..add('legId', legId)
+          ..add('isFinished', isFinished))
         .toString();
   }
 }
@@ -535,6 +551,10 @@ class GUpdateMatchInputBuilder
   String? get legId => _$this._legId;
   set legId(String? legId) => _$this._legId = legId;
 
+  bool? _isFinished;
+  bool? get isFinished => _$this._isFinished;
+  set isFinished(bool? isFinished) => _$this._isFinished = isFinished;
+
   GUpdateMatchInputBuilder();
 
   GUpdateMatchInputBuilder get _$this {
@@ -545,6 +565,7 @@ class GUpdateMatchInputBuilder
       _segment = $v.segment;
       _matchId = $v.matchId;
       _legId = $v.legId;
+      _isFinished = $v.isFinished;
       _$v = null;
     }
     return this;
@@ -573,7 +594,9 @@ class GUpdateMatchInputBuilder
             matchId: BuiltValueNullFieldError.checkNotNull(
                 matchId, 'GUpdateMatchInput', 'matchId'),
             legId: BuiltValueNullFieldError.checkNotNull(
-                legId, 'GUpdateMatchInput', 'legId'));
+                legId, 'GUpdateMatchInput', 'legId'),
+            isFinished: BuiltValueNullFieldError.checkNotNull(
+                isFinished, 'GUpdateMatchInput', 'isFinished'));
     replace(_$result);
     return _$result;
   }

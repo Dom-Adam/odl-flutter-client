@@ -57,6 +57,7 @@ abstract class GUpdateMatchInput
   int get segment;
   String get matchId;
   String get legId;
+  bool get isFinished;
   static Serializer<GUpdateMatchInput> get serializer =>
       _$gUpdateMatchInputSerializer;
   Map<String, dynamic> toJson() =>

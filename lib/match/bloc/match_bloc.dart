@@ -6,6 +6,7 @@ import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:odl_flutter_client/common/constants.dart';
 import 'package:odl_flutter_client/common/models/score.dart';
+import 'package:odl_flutter_client/cubit/app_cubit.dart';
 import 'package:odl_flutter_client/repositories/match_repository.dart';
 import 'package:flutter/foundation.dart';
 
@@ -21,7 +22,9 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
     required this.player2,
     required this.whoAmI,
     required MatchRepository matchRepository,
+    required AppCubit appCubit,
   })  : _matchRepository = matchRepository,
+        _appCubit = appCubit,
         super(MatchState(
           matchId: matchId,
           legId: legId,
@@ -69,24 +72,20 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
                 ? 3
                 : 1;
 
-        try {
-          await _matchRepository.updateMatch(
-            int.parse(state.score.value),
-            state.legId,
-            state.matchId,
-            segment,
-          );
-          emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        await _matchRepository.updateMatch(
+          field: int.parse(state.score.value),
+          legId: state.legId,
+          matchId: state.matchId,
+          segment: segment,
+        );
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
 
-          emit(state.copyWith(
-            status: FormzStatus.pure,
-            score: const Score.pure(),
-            scoreField: '',
-            selections: [false, false],
-          ));
-        } catch (error) {
-          emit(state.copyWith(status: FormzStatus.submissionFailure));
-        }
+        emit(state.copyWith(
+          status: FormzStatus.pure,
+          score: const Score.pure(),
+          scoreField: '',
+          selections: [false, false],
+        ));
       }
     });
 
@@ -95,7 +94,9 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
       final selection = !state.selections[eventIndex];
       emit(state.copyWith(
           selections: List.generate(
-              2, (index) => index == eventIndex ? selection : false)));
+        2,
+        (index) => index == eventIndex ? selection : false,
+      )));
     });
 
     _matchSubscription =
@@ -143,6 +144,26 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
         ),
       ));
     });
+
+    on<MatchRequestFinish>((event, emit) {
+      print('match request finish');
+
+      final segment = state.selections[0]
+          ? 2
+          : state.selections[1]
+              ? 3
+              : 1;
+
+      _matchRepository.updateMatch(
+        field: int.parse(state.score.value == '' ? '0' : state.score.value),
+        legId: state.legId,
+        matchId: state.matchId,
+        segment: segment,
+        isFinished: true,
+      );
+
+      _appCubit.finishMatch();
+    });
   }
 
   final String matchId;
@@ -150,6 +171,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
   final String player1;
   final String player2;
   final int whoAmI;
+  final AppCubit _appCubit;
   final MatchRepository _matchRepository;
   late final StreamSubscription<dynamic> _matchSubscription;
 

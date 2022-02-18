@@ -114,7 +114,13 @@ const Leg = _i1.ObjectTypeDefinitionNode(
           type: _i1.ListTypeNode(
               type: _i1.NamedTypeNode(
                   name: _i1.NameNode(value: 'Visit'), isNonNull: true),
-              isNonNull: true))
+              isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'playerId'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true))
     ]);
 const Match = _i1.ObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'Match'),
@@ -142,7 +148,13 @@ const Match = _i1.ObjectTypeDefinitionNode(
           type: _i1.ListTypeNode(
               type: _i1.NamedTypeNode(
                   name: _i1.NameNode(value: 'Leg'), isNonNull: true),
-              isNonNull: true))
+              isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isFinished'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true))
     ]);
 const User = _i1.ObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'User'),
@@ -384,6 +396,12 @@ const UpdateMatchInput = _i1.InputObjectTypeDefinitionNode(
           directives: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'String'), isNonNull: true),
+          defaultValue: null),
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'isFinished'),
+          directives: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true),
           defaultValue: null)
     ]);
 const Subscription = _i1.ObjectTypeDefinitionNode(

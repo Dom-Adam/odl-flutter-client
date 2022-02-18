@@ -1,5 +1,6 @@
 subscription ListenToMatch($matchId: String!) {
   listenToMatch(matchId: $matchId) {
+    isFinished
     legs {
       id
       points

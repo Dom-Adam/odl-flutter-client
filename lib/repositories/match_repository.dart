@@ -17,41 +17,25 @@ import 'package:rxdart/rxdart.dart';
 enum MatchStatus { inactive, waiting, active }
 
 class MatchRepository {
-  final matchStatusSubject = BehaviorSubject<MatchStatus>();
-  final getMatchIdController =
-      BehaviorSubject<OperationResponse<GGetMatchIdData, GGetMatchIdVars>>();
-  Stream<OperationResponse<GGetMatchIdData, GGetMatchIdVars>>
-      get getMatchIdStream async* {
-    yield* getMatchIdController.stream;
+  final _matchStatusSubject = BehaviorSubject<bool>();
+  Stream<bool> get matchStatus async* {
+    yield* _matchStatusSubject.stream;
   }
+
+  late Stream<OperationResponse<GGetMatchIdData, GGetMatchIdVars>>
+      getMatchIdController;
 
   final matchVisitController = StreamController();
 
-  StreamSubscription<OperationResponse<GGetMatchIdData, GGetMatchIdVars>>
-      getMatchId(
-    String userId,
-  ) {
-    return graphqlClient
+  Future<OperationResponse<GGetMatchIdData, GGetMatchIdVars>> searchOpponent(
+      String userId) {
+    _matchStatusSubject.add(true);
+    final reponse = graphqlClient
         .request(GGetMatchIdReq((b) => b..vars.userId = userId))
-        .listen((event) {
-      if (event.data?.getMatchId.id.isNotEmpty == true &&
-          event.data?.getMatchId.legs.first.id.isNotEmpty == true) {
-        getMatchIdController.add(event);
+        .first;
+    final request = graphqlClient.request(GSearchOpponentReq()).first;
 
-        matchStatusSubject.add(MatchStatus.active);
-      } else {
-        matchStatusSubject.add(MatchStatus.inactive);
-      }
-    });
-  }
-
-  Future<void> searchOpponent() async {
-    final response = await graphqlClient.request(GSearchOpponentReq()).first;
-    if (response.data?.searchOpponent.isNotEmpty == true) {
-      matchStatusSubject.add(MatchStatus.waiting);
-    } else {
-      matchStatusSubject.add(MatchStatus.inactive);
-    }
+    return reponse;
   }
 
   Stream<OperationResponse<GListenToMatchData, GListenToMatchVars>>
@@ -60,14 +44,23 @@ class MatchRepository {
         .request(GListenToMatchReq((b) => b..vars.matchId = matchId));
   }
 
-  Future<OperationResponse<GUpdateMatchData, GUpdateMatchVars>> updateMatch(
-      int field, String legId, String matchId, int segment) {
+  void foundOpponent() => _matchStatusSubject.add(false);
+
+  Future<OperationResponse<GUpdateMatchData, GUpdateMatchVars>> updateMatch({
+    required int field,
+    required String legId,
+    required String matchId,
+    required int segment,
+    bool isFinished = false,
+  }) {
+    print('update match called');
     return graphqlClient
         .request(GUpdateMatchReq((b) => b
           ..vars.score.field = field
           ..vars.score.legId = legId
           ..vars.score.matchId = matchId
-          ..vars.score.segment = segment))
+          ..vars.score.segment = segment
+          ..vars.score.isFinished = isFinished))
         .first;
   }
 }

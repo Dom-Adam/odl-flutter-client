@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:odl_flutter_client/cubit/app_cubit.dart';
 import 'package:odl_flutter_client/match/bloc/match_bloc.dart';
 import 'package:odl_flutter_client/match/view/numpad.dart';
-import 'package:odl_flutter_client/repositories/authentication_repository.dart';
 import 'package:odl_flutter_client/repositories/match_repository.dart';
 
 class MatchPage extends StatelessWidget {
@@ -10,64 +10,35 @@ class MatchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.read<AppCubit>().state;
+
     return BlocProvider(
-      create: (context) => MatchBloc(
-        matchId: context
-            .read<MatchRepository>()
-            .getMatchIdController
-            .valueWrapper!
-            .value
-            .data!
-            .getMatchId
-            .id,
-        legId: context
-            .read<MatchRepository>()
-            .getMatchIdController
-            .valueWrapper!
-            .value
-            .data!
-            .getMatchId
-            .legs
-            .first
-            .id,
+      create: (_) => MatchBloc(
+        matchId: appState.matchId,
+        legId: appState.legId,
         matchRepository: context.read<MatchRepository>(),
-        player1: context
-            .read<MatchRepository>()
-            .getMatchIdController
-            .valueWrapper!
-            .value
-            .data!
-            .getMatchId
-            .players
-            .first
-            .username,
-        player2: context
-            .read<MatchRepository>()
-            .getMatchIdController
-            .valueWrapper!
-            .value
-            .data!
-            .getMatchId
-            .players
-            .last
-            .username,
-        whoAmI: context
-                    .read<MatchRepository>()
-                    .getMatchIdController
-                    .valueWrapper!
-                    .value
-                    .data!
-                    .getMatchId
-                    .players
-                    .first
-                    .id ==
-                context.read<AuthenticationRepository>().userId
-            ? 1
-            : 2,
+        player1: appState.player1,
+        player2: appState.player2,
+        whoAmI: appState.whoAmI,
+        appCubit: context.read<AppCubit>(),
       ),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Match'),
+          automaticallyImplyLeading: false,
+          actions: [
+            BlocBuilder<MatchBloc, MatchState>(
+              builder: (context, state) {
+                return IconButton(
+                  onPressed: () {
+                    print('app bar icon button');
+                    context.read<MatchBloc>().add(const MatchRequestFinish());
+                  },
+                  icon: const Icon(Icons.close),
+                );
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: Column(

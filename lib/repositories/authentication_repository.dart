@@ -5,6 +5,7 @@ import 'package:gql_http_link/gql_http_link.dart';
 import 'package:gql_websocket_link/gql_websocket_link.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:odl_flutter_client/common/constants.dart';
+import 'package:odl_flutter_client/common/models/auth_info.dart';
 import 'package:odl_flutter_client/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -12,12 +13,15 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
-  final _controller = StreamController<AuthenticationStatus>();
+  final _controller = StreamController<AuthInfo>();
 
   late String userId;
 
-  Stream<AuthenticationStatus> get status async* {
-    yield AuthenticationStatus.unknown;
+  Stream<AuthInfo> get authInfo async* {
+    yield AuthInfo(
+      authenticationStatus: AuthenticationStatus.unknown,
+      userId: '',
+    );
     yield* _controller.stream;
   }
 
@@ -31,7 +35,9 @@ class AuthenticationRepository {
       headers: {'Content-Type': 'application/json'},
     );
 
+    print('request before check');
     if (request.statusCode == 201) {
+      print('request');
       return jsonDecode(request.body);
     } else {
       throw Exception('authentication failed');
@@ -45,6 +51,7 @@ class AuthenticationRepository {
     Map<String, dynamic> response = await getToken(username, password);
 
     await secureStorage.write(key: 'jwtToken', value: response['access_token']);
+    print('response ${response['access_token']}');
 
     graphqlClient = Client(
       link: Link.split(
@@ -61,13 +68,23 @@ class AuthenticationRepository {
       ),
     );
 
-    userId = JwtDecoder.decode(response['access_token'])['sub'];
-    _controller.add(AuthenticationStatus.authenticated);
+    print('response after client ${response['access_token']}');
+    print(JwtDecoder.decode(response['access_token'])['sub']);
+
+    final String userId = JwtDecoder.decode(response['access_token'])['sub'];
+
+    _controller.add(AuthInfo(
+      authenticationStatus: AuthenticationStatus.authenticated,
+      userId: userId,
+    ));
   }
 
   Future<void> logOut() async {
     await secureStorage.delete(key: jwtToken);
-    _controller.add(AuthenticationStatus.unauthenticated);
+    _controller.add(AuthInfo(
+      authenticationStatus: AuthenticationStatus.unauthenticated,
+      userId: '',
+    ));
   }
 
   Future<String?> checkAuthStatus() async {
@@ -75,10 +92,16 @@ class AuthenticationRepository {
     String? jwt = await secureStorage.read(key: jwtToken);
 
     if (jwt != null && !JwtDecoder.isExpired(jwt)) {
-      _controller.add(AuthenticationStatus.authenticated);
+      _controller.add(AuthInfo(
+        authenticationStatus: AuthenticationStatus.authenticated,
+        userId: JwtDecoder.decode(jwt)['sub'],
+      ));
       return jwt;
     } else {
-      _controller.add(AuthenticationStatus.unauthenticated);
+      _controller.add(AuthInfo(
+        authenticationStatus: AuthenticationStatus.unauthenticated,
+        userId: '',
+      ));
       return null;
     }
   }

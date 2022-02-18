@@ -42,6 +42,7 @@ abstract class GListenToMatchData_listenToMatch
       b..G__typename = 'Match';
   @BuiltValueField(wireName: '__typename')
   String get G__typename;
+  bool get isFinished;
   BuiltList<GListenToMatchData_listenToMatch_legs> get legs;
   static Serializer<GListenToMatchData_listenToMatch> get serializer =>
       _$gListenToMatchDataListenToMatchSerializer;
