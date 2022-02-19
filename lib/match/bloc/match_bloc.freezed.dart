@@ -30,7 +30,8 @@ class _$MatchStateTearOff {
       required String scoreField,
       List<bool> selections = const [false, false],
       FormzStatus status = FormzStatus.pure,
-      Score score = const Score.pure()}) {
+      Score score = const Score.pure(),
+      required bool isFinished}) {
     return _MatchState(
       player1Legs: player1Legs,
       player1Points: player1Points,
@@ -46,6 +47,7 @@ class _$MatchStateTearOff {
       selections: selections,
       status: status,
       score: score,
+      isFinished: isFinished,
     );
   }
 }
@@ -69,6 +71,7 @@ mixin _$MatchState {
   List<bool> get selections => throw _privateConstructorUsedError;
   FormzStatus get status => throw _privateConstructorUsedError;
   Score get score => throw _privateConstructorUsedError;
+  bool get isFinished => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MatchStateCopyWith<MatchState> get copyWith =>
@@ -94,7 +97,8 @@ abstract class $MatchStateCopyWith<$Res> {
       String scoreField,
       List<bool> selections,
       FormzStatus status,
-      Score score});
+      Score score,
+      bool isFinished});
 }
 
 /// @nodoc
@@ -121,6 +125,7 @@ class _$MatchStateCopyWithImpl<$Res> implements $MatchStateCopyWith<$Res> {
     Object? selections = freezed,
     Object? status = freezed,
     Object? score = freezed,
+    Object? isFinished = freezed,
   }) {
     return _then(_value.copyWith(
       player1Legs: player1Legs == freezed
@@ -179,6 +184,10 @@ class _$MatchStateCopyWithImpl<$Res> implements $MatchStateCopyWith<$Res> {
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as Score,
+      isFinished: isFinished == freezed
+          ? _value.isFinished
+          : isFinished // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -203,7 +212,8 @@ abstract class _$MatchStateCopyWith<$Res> implements $MatchStateCopyWith<$Res> {
       String scoreField,
       List<bool> selections,
       FormzStatus status,
-      Score score});
+      Score score,
+      bool isFinished});
 }
 
 /// @nodoc
@@ -232,6 +242,7 @@ class __$MatchStateCopyWithImpl<$Res> extends _$MatchStateCopyWithImpl<$Res>
     Object? selections = freezed,
     Object? status = freezed,
     Object? score = freezed,
+    Object? isFinished = freezed,
   }) {
     return _then(_MatchState(
       player1Legs: player1Legs == freezed
@@ -290,6 +301,10 @@ class __$MatchStateCopyWithImpl<$Res> extends _$MatchStateCopyWithImpl<$Res>
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as Score,
+      isFinished: isFinished == freezed
+          ? _value.isFinished
+          : isFinished // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -311,7 +326,8 @@ class _$_MatchState with DiagnosticableTreeMixin implements _MatchState {
       required this.scoreField,
       this.selections = const [false, false],
       this.status = FormzStatus.pure,
-      this.score = const Score.pure()});
+      this.score = const Score.pure(),
+      required this.isFinished});
 
   @override
   final int player1Legs;
@@ -344,10 +360,12 @@ class _$_MatchState with DiagnosticableTreeMixin implements _MatchState {
   @JsonKey(defaultValue: const Score.pure())
   @override
   final Score score;
+  @override
+  final bool isFinished;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'MatchState(player1Legs: $player1Legs, player1Points: $player1Points, player2Legs: $player2Legs, player2Points: $player2Points, matchId: $matchId, legId: $legId, player1: $player1, player2: $player2, whoAmI: $whoAmI, currentlyThrowing: $currentlyThrowing, scoreField: $scoreField, selections: $selections, status: $status, score: $score)';
+    return 'MatchState(player1Legs: $player1Legs, player1Points: $player1Points, player2Legs: $player2Legs, player2Points: $player2Points, matchId: $matchId, legId: $legId, player1: $player1, player2: $player2, whoAmI: $whoAmI, currentlyThrowing: $currentlyThrowing, scoreField: $scoreField, selections: $selections, status: $status, score: $score, isFinished: $isFinished)';
   }
 
   @override
@@ -368,7 +386,8 @@ class _$_MatchState with DiagnosticableTreeMixin implements _MatchState {
       ..add(DiagnosticsProperty('scoreField', scoreField))
       ..add(DiagnosticsProperty('selections', selections))
       ..add(DiagnosticsProperty('status', status))
-      ..add(DiagnosticsProperty('score', score));
+      ..add(DiagnosticsProperty('score', score))
+      ..add(DiagnosticsProperty('isFinished', isFinished));
   }
 
   @override
@@ -412,7 +431,10 @@ class _$_MatchState with DiagnosticableTreeMixin implements _MatchState {
             (identical(other.status, status) ||
                 const DeepCollectionEquality().equals(other.status, status)) &&
             (identical(other.score, score) ||
-                const DeepCollectionEquality().equals(other.score, score)));
+                const DeepCollectionEquality().equals(other.score, score)) &&
+            (identical(other.isFinished, isFinished) ||
+                const DeepCollectionEquality()
+                    .equals(other.isFinished, isFinished)));
   }
 
   @override
@@ -431,7 +453,8 @@ class _$_MatchState with DiagnosticableTreeMixin implements _MatchState {
       const DeepCollectionEquality().hash(scoreField) ^
       const DeepCollectionEquality().hash(selections) ^
       const DeepCollectionEquality().hash(status) ^
-      const DeepCollectionEquality().hash(score);
+      const DeepCollectionEquality().hash(score) ^
+      const DeepCollectionEquality().hash(isFinished);
 
   @JsonKey(ignore: true)
   @override
@@ -454,7 +477,8 @@ abstract class _MatchState implements MatchState {
       required String scoreField,
       List<bool> selections,
       FormzStatus status,
-      Score score}) = _$_MatchState;
+      Score score,
+      required bool isFinished}) = _$_MatchState;
 
   @override
   int get player1Legs => throw _privateConstructorUsedError;
@@ -484,6 +508,8 @@ abstract class _MatchState implements MatchState {
   FormzStatus get status => throw _privateConstructorUsedError;
   @override
   Score get score => throw _privateConstructorUsedError;
+  @override
+  bool get isFinished => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$MatchStateCopyWith<_MatchState> get copyWith =>

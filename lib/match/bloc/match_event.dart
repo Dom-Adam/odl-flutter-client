@@ -15,6 +15,7 @@ class MatchUpdated extends MatchEvent {
     required this.player2Points,
     required this.legId,
     required this.currentlyThrowing,
+    required this.isFinished,
   });
 
   final int player1Legs;
@@ -23,6 +24,7 @@ class MatchUpdated extends MatchEvent {
   final int player2Points;
   final String legId;
   final int currentlyThrowing;
+  final bool isFinished;
 
   @override
   List<Object> get props => [
@@ -31,7 +33,8 @@ class MatchUpdated extends MatchEvent {
         player2Legs,
         player2Points,
         legId,
-        currentlyThrowing
+        currentlyThrowing,
+        isFinished,
       ];
 }
 

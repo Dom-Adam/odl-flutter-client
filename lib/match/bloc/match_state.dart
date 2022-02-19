@@ -17,5 +17,6 @@ class MatchState with _$MatchState {
     @Default([false, false]) List<bool> selections,
     @Default(FormzStatus.pure) FormzStatus status,
     @Default(Score.pure()) Score score,
+    required bool isFinished,
   }) = _MatchState;
 }

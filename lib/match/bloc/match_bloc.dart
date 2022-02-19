@@ -37,6 +37,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
           currentlyThrowing: 1,
           whoAmI: whoAmI,
           scoreField: '',
+          isFinished: false,
         )) {
     on<MatchUpdated>((event, emit) {
       emit(state.copyWith(
@@ -46,6 +47,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
         player2Points: event.player2Points,
         legId: event.legId,
         currentlyThrowing: event.currentlyThrowing,
+        isFinished: event.isFinished,
       ));
     });
 
@@ -101,8 +103,9 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
 
     _matchSubscription =
         _matchRepository.listenToMatch(matchId).listen((event) {
-      if (event.data == null) return;
-
+      if (event.data == null) {
+        return;
+      }
       final leg =
           event.data?.listenToMatch.legs.where((leg) => !leg.isFinished);
       final legId = leg == null || leg.isEmpty ? state.legId : leg.first.id;
@@ -142,6 +145,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
           legs: event.data!.listenToMatch.legs.length,
           newVisit: isNewVisit,
         ),
+        isFinished: event.data?.listenToMatch.isFinished ?? false,
       ));
     });
 
