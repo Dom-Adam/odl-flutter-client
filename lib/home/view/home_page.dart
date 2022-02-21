@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            context.read<AppCubit>().searchOpponent();
+                            context.read<HomeCubit>().searchOpponent();
                           },
                           child: const Text('ready'),
                         ),

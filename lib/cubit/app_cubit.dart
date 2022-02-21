@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:ferry/ferry.dart';
+import 'package:odl_flutter_client/home/graphql/get_match_id.data.gql.dart';
+import 'package:odl_flutter_client/home/graphql/get_match_id.var.gql.dart';
 import 'package:odl_flutter_client/repositories/authentication_repository.dart';
 import 'package:odl_flutter_client/repositories/match_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -23,9 +26,31 @@ class AppCubit extends Cubit<AppState> {
           player2: '',
           whoAmI: 0,
           isMatchActive: false,
-        ));
+        )) {
+    _matchRepository.getMatchId(state.userId);
+    _matchIdStream = _matchRepository.matchData.listen((event) {
+      final getMatchId = event.data?.getMatchId;
+
+      if (getMatchId?.id != null &&
+          getMatchId?.legs[0].id != null &&
+          getMatchId?.players[0].username != null &&
+          getMatchId?.players[1].username != null &&
+          getMatchId?.players[0].id != null &&
+          getMatchId?.id != state.matchId) {
+        matchInformationChanged(
+          matchId: getMatchId!.id,
+          legId: getMatchId.legs[0].id,
+          player1: getMatchId.players[0].username,
+          player2: getMatchId.players[1].username,
+          whoAmI: getMatchId.players[0].id == state.userId ? 1 : 2,
+        );
+      }
+    });
+  }
 
   final MatchRepository _matchRepository;
+  late final StreamSubscription<
+      OperationResponse<GGetMatchIdData, GGetMatchIdVars>> _matchIdStream;
 
   void loggedOut() => emit(loginPage());
   void loggedIn() {
@@ -129,34 +154,32 @@ class AppCubit extends Cubit<AppState> {
         whoAmI: whoAmI,
       );
 
-  Future<void> searchOpponent() async {
-    final response = await _matchRepository.searchOpponent(state.userId);
-    _matchRepository.foundOpponent();
-    final getMatchId = response.data?.getMatchId;
-
-    if (getMatchId?.id != null &&
-        getMatchId?.legs[0].id != null &&
-        getMatchId?.players[0].username != null &&
-        getMatchId?.players[1].username != null &&
-        getMatchId?.players[0].id != null) {
-      emit(matchPage(
-        matchId: getMatchId!.id,
-        legId: getMatchId.legs[0].id,
-        player1: getMatchId.players[0].username,
-        player2: getMatchId.players[1].username,
-        whoAmI: getMatchId.players[0].id == state.userId ? 1 : 2,
-      ));
-    }
-  }
-
   void finishMatch() {
     print('finish match called');
     emit(homePage(userId: state.userId));
   }
 
+  void matchInformationChanged({
+    required String matchId,
+    required String legId,
+    required String player1,
+    required String player2,
+    required int whoAmI,
+  }) {
+    emit(matchPage(
+      matchId: matchId,
+      legId: legId,
+      player1: player1,
+      player2: player2,
+      whoAmI: whoAmI,
+    ));
+  }
+
   @override
   void onChange(Change<AppState> change) {
-    print(change);
+    if (change.currentState.userId != change.nextState.userId) {
+      _matchRepository.getMatchId(change.nextState.userId);
+    }
     super.onChange(change);
   }
 
