@@ -16,7 +16,9 @@ class HomeCubit extends Cubit<HomeState> {
   })  : _matchRepository = matchRepository,
         super(const HomeInitial()) {
     _matchRepository.matchStatus.listen((event) {
-      emit(HomeMatchStatusChanged(event));
+      if (!isClosed) {
+        emit(HomeMatchStatusChanged(event));
+      }
     });
 
     getMatchIdSubscription = _matchRepository.getMatchId(userId);
