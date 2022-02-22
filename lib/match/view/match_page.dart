@@ -123,9 +123,12 @@ class PlayerName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       fit: FlexFit.tight,
-      child: FittedBox(
-        fit: BoxFit.contain,
-        child: playerName,
+      child: FractionallySizedBox(
+        heightFactor: 0.2,
+        child: FittedBox(
+          child: playerName,
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
@@ -173,39 +176,6 @@ class ScoreBoard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class ScoreBoardHalf extends StatelessWidget {
-  const ScoreBoardHalf({
-    Key? key,
-    required this.player,
-    required this.scoreFields,
-  }) : super(key: key);
-
-  final Widget player;
-  final List<Widget> scoreFields;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Flexible(
-          fit: FlexFit.tight,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: player,
-          ),
-        ),
-        Flexible(
-          fit: FlexFit.tight,
-          child: Row(
-            children: scoreFields,
-          ),
-        ),
-      ],
     );
   }
 }
