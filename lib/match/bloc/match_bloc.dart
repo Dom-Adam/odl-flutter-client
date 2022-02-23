@@ -61,6 +61,9 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
         score: score,
         status: Formz.validate([score]),
         scoreField: scoreField,
+        selections: scoreField == '25'
+            ? [state.selections[0], false]
+            : state.selections,
       ));
     });
 

@@ -114,10 +114,14 @@ class NumberKey extends StatelessWidget {
       fit: FlexFit.tight,
       child: BlocBuilder<MatchBloc, MatchState>(
         buildWhen: (previous, current) =>
-            previous.currentlyThrowing != current.currentlyThrowing,
+            previous.currentlyThrowing != current.currentlyThrowing ||
+            previous.scoreField != current.scoreField,
         builder: (context, state) {
+          final score = int.tryParse(state.scoreField) ?? 0;
+
           return ElevatedButton(
-            onPressed: state.currentlyThrowing == state.whoAmI
+            onPressed: state.currentlyThrowing == state.whoAmI && score < 20 ||
+                    score == 25
                 ? () => context.read<MatchBloc>().add(MatchScoreChanged(number))
                 : null,
             child: Text(number),
@@ -159,14 +163,16 @@ class ToggleButton extends StatelessWidget {
       child: BlocBuilder<MatchBloc, MatchState>(
         buildWhen: (previous, current) =>
             previous.currentlyThrowing != current.currentlyThrowing ||
-            previous.selections[index] != current.selections[index],
+            previous.selections[index] != current.selections[index] ||
+            previous.scoreField != current.scoreField,
         builder: (context, state) {
           return ElevatedButton(
             style: const ButtonStyle().copyWith(
               backgroundColor: MaterialStateProperty.all(
                   state.selections[index] ? Colors.green : null),
             ),
-            onPressed: state.currentlyThrowing == state.whoAmI
+            onPressed: state.currentlyThrowing == state.whoAmI && index == 0 ||
+                    state.scoreField != '25'
                 ? () {
                     context.read<MatchBloc>().add(MatchSegmentChanged(index));
                   }
