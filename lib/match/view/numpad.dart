@@ -5,9 +5,7 @@ import 'package:odl_flutter_client/match/bloc/match_bloc.dart';
 import 'package:formz/formz.dart';
 
 class Numpad extends StatelessWidget {
-  Numpad({Key? key}) : super(key: key);
-
-  final _controller = TextEditingController();
+  const Numpad({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +28,13 @@ class Numpad extends StatelessWidget {
               fit: FlexFit.tight,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox(
+                    width: Theme.of(context).iconTheme.size ?? 24 + 16,
+                  ),
                   Expanded(
-                    child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.contain,
                       child: BlocBuilder<MatchBloc, MatchState>(
                         buildWhen: (previous, current) =>
                             previous.scoreField != current.scoreField,
@@ -42,7 +43,11 @@ class Numpad extends StatelessWidget {
                             state.scoreField,
                             textAlign: TextAlign.center,
                             style: state.score.invalid
-                                ? TextStyle(color: Theme.of(context).errorColor)
+                                ? const TextStyle().copyWith(
+                                    color: Colors.white,
+                                    backgroundColor:
+                                        Theme.of(context).errorColor,
+                                  )
                                 : null,
                           );
                         },
