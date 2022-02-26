@@ -101,7 +101,7 @@ class MatchPage extends StatelessWidget {
                   ),
                 ),
                 const ScoreBoard(),
-                Numpad()
+                const Numpad()
               ],
             ),
           ),
@@ -156,7 +156,7 @@ class ScoreBoard extends StatelessWidget {
             label: 'points',
             blocSelector: BlocSelector<MatchBloc, MatchState, int>(
               selector: (state) => state.player1Points,
-              builder: (context, state) => Text(state.toString()),
+              builder: (context, state) => AnimatedScore(end: state),
             ),
           ),
           ScoreField(
@@ -164,7 +164,7 @@ class ScoreBoard extends StatelessWidget {
             label: 'points',
             blocSelector: BlocSelector<MatchBloc, MatchState, int>(
               selector: (state) => state.player2Points,
-              builder: (context, state) => Text(state.toString()),
+              builder: (context, state) => AnimatedScore(end: state),
             ),
           ),
           ScoreField(
@@ -217,5 +217,40 @@ class ScoreField extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class AnimatedScore extends StatefulWidget {
+  const AnimatedScore({Key? key, required this.end}) : super(key: key);
+
+  final int end;
+
+  @override
+  _AnimatedScoreState createState() => _AnimatedScoreState();
+}
+
+class _AnimatedScoreState extends State<AnimatedScore> {
+  int begin = 501;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.end < begin) {
+      return TweenAnimationBuilder(
+        tween: IntTween(
+          begin: begin,
+          end: widget.end,
+        ),
+        duration: Duration(milliseconds: (begin - widget.end) * 1000 ~/ 45),
+        builder: (context, points, _) => Text(points.toString()),
+        onEnd: () => setState(() {
+          begin = widget.end;
+        }),
+      );
+    } else {
+      setState(() {
+        begin = widget.end;
+      });
+      return Text(begin.toString());
+    }
   }
 }

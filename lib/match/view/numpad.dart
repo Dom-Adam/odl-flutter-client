@@ -177,7 +177,8 @@ class ToggleButton extends StatelessWidget {
                   state.selections[index] ? Colors.green : null),
             ),
             onPressed: state.currentlyThrowing == state.whoAmI && index == 0 ||
-                    state.scoreField != '25'
+                    state.scoreField != '25' &&
+                        state.currentlyThrowing == state.whoAmI
                 ? () {
                     context.read<MatchBloc>().add(MatchSegmentChanged(index));
                   }
