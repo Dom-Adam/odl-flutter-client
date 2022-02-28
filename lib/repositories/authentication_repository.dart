@@ -30,7 +30,7 @@ class AuthenticationRepository {
     String password,
   ) async {
     final request = await http.post(
-      Uri.parse('http://localhost:3000/auth/login'),
+      Uri.parse('http$baseUrl/auth/login'),
       body: jsonEncode({'username': username, 'password': password}),
       headers: {'Content-Type': 'application/json'},
     );
@@ -58,11 +58,11 @@ class AuthenticationRepository {
         (request) => request.toString().contains('subscription'),
         WebSocketLink(null, channelGenerator: () {
           return WebSocketChannel.connect(
-            Uri.parse('ws://localhost:3000/graphql'),
+            Uri.parse('ws$baseUrl/graphql'),
             protocols: ['graphql-ws'],
           );
         }),
-        HttpLink('http://localhost:3000/graphql', defaultHeaders: {
+        HttpLink('http$baseUrl/graphql', defaultHeaders: {
           'Authorization': 'Bearer ${response['access_token']}'
         }),
       ),
