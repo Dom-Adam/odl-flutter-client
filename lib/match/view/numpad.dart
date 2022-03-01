@@ -125,8 +125,11 @@ class NumberKey extends StatelessWidget {
           final score = int.tryParse(state.scoreField) ?? 0;
 
           return ElevatedButton(
-            onPressed: state.currentlyThrowing == state.whoAmI && score < 20 ||
-                    score == 25
+            onPressed: state.whoAmI == state.currentlyThrowing &&
+                        state.scoreField.length < 2 &&
+                        score < 2 ||
+                    state.scoreField == '2' && number == '5' ||
+                    state.scoreField == '2' && number == '0'
                 ? () => context.read<MatchBloc>().add(MatchScoreChanged(number))
                 : null,
             child: Text(number),
