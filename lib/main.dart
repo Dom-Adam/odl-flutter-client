@@ -7,7 +7,7 @@ import 'package:odl_flutter_client/common/constants.dart';
 import 'package:odl_flutter_client/repositories/authentication_repository.dart';
 
 const secureStorage = FlutterSecureStorage();
-Client graphqlClient = Client(link: HttpLink('http$baseUrl/graphql'));
+Client graphqlClient = Client(link: HttpLink('https$baseUrl/graphql'));
 
 void main() {
   runApp(

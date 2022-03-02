@@ -30,7 +30,7 @@ class AuthenticationRepository {
     String password,
   ) async {
     final request = await http.post(
-      Uri.parse('http$baseUrl/auth/login'),
+      Uri.parse('https$baseUrl/auth/login'),
       body: jsonEncode({'username': username, 'password': password}),
       headers: {'Content-Type': 'application/json'},
     );
@@ -62,7 +62,7 @@ class AuthenticationRepository {
             protocols: ['graphql-ws'],
           );
         }),
-        HttpLink('http$baseUrl/graphql', defaultHeaders: {
+        HttpLink('https$baseUrl/graphql', defaultHeaders: {
           'Authorization': 'Bearer ${response['access_token']}'
         }),
       ),
