@@ -70915,7 +70915,7 @@ A.YC.prototype={
 $1(a){return B.c.A("Request(operation: "+a.a.j(0)+", variables: "+A.f(a.b)+", context: "+a.c.j(0)+")","subscription")},
 $S:155}
 A.YD.prototype={
-$0(){return A.aH9(A.jv("ws://4pk0dc.sse.codesandbox.io/graphql"),A.a(["graphql-ws"],t.s))},
+$0(){return A.aH9(A.jv("wss://4pk0dc.sse.codesandbox.io/graphql"),A.a(["graphql-ws"],t.s))},
 $S:528}
 A.uf.prototype={
 gwH(){var $async$gwH=A.a_(function(a,b){switch(a){case 2:n=q

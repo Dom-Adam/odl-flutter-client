@@ -58,7 +58,7 @@ class AuthenticationRepository {
         (request) => request.toString().contains('subscription'),
         WebSocketLink(null, channelGenerator: () {
           return WebSocketChannel.connect(
-            Uri.parse('ws$baseUrl/graphql'),
+            Uri.parse('wss$baseUrl/graphql'),
             protocols: ['graphql-ws'],
           );
         }),
